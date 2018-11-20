@@ -34,7 +34,6 @@ void setup() {
   pinMode(NAPPI, INPUT_PULLUP);
 
   digitalWrite(ENAB, LOW);
-  digitalWrite(SLEEP, HIGH);
   digitalWrite(RESET, HIGH); 
   vanhaTila = digitalRead(NAPPI); 
 
@@ -42,7 +41,10 @@ void setup() {
 
 }
 
+unsigned long vahti = millis();
+
 void loop() {
+  
   nappi();
   if (tila == TOIMINTA) {
   suunnanvaihto();
@@ -50,21 +52,29 @@ void loop() {
     suunta=SEIS;
   }
     digitalWrite(DIR, suunta);
-  }
+    if(millis() - vahti > 1000){
+        digitalWrite(SLEEP, LOW);
+        Serial.println("Nukkuu");
+    }
+}
 
-
-
-void suunnanvaihto() {
+void aja(){
   
-  unsigned long currentMillis = millis();
-  
-  digitalWrite(MS1, LOW);
-  digitalWrite(MS2, LOW);
+  vahti = millis();
+  digitalWrite(SLEEP, HIGH);
   digitalWrite(STEP, HIGH);
   delayMicroseconds(viive);
   digitalWrite(STEP, LOW);
   delayMicroseconds(viive);
-    
+
+}
+
+void suunnanvaihto() {
+  
+  unsigned long currentMillis = millis();
+  digitalWrite(MS1, LOW);
+  digitalWrite(MS2, LOW);
+  aja();  
    if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis;
 
