@@ -11,6 +11,8 @@ const int NAPPI = 2;
 const int PAINETTU = LOW;
 const int TOIMINTA = 0;
 const int SEIS = 1;
+const int NAPPIVAS = 3;
+const int NAPPIOIK = 4;
 
 
 int suunta;
@@ -18,6 +20,7 @@ int viive = 980;
 int vanhaTila;
 int tila = SEIS;
 int suodatus = 15;
+int nappiArvo = 0;
 
 unsigned long previousMillis = 0;        
 const long interval = 150;
@@ -32,6 +35,8 @@ void setup() {
   pinMode(RESET, OUTPUT);
   pinMode(DIR, OUTPUT);
   pinMode(NAPPI, INPUT_PULLUP);
+  pinMode(NAPPIVAS, INPUT_PULLUP);
+  pinMode(NAPPIOIK, INPUT_PULLUP);
 
   digitalWrite(ENAB, LOW);
   digitalWrite(RESET, HIGH); 
@@ -55,7 +60,9 @@ void loop() {
     if(millis() - vahti > 1000){
         digitalWrite(SLEEP, LOW);
         Serial.println("Nukkuu");
-    }
+    } 
+//vasemmalle();
+//oikealle();    
 }
 
 void aja(){
@@ -108,3 +115,32 @@ void nappi() {
   } 
   vanhaTila=uusiTila;
 }
+
+void oikealle() {
+  nappiArvo = digitalRead(NAPPIOIK);
+  digitalWrite(MS1, LOW);
+  digitalWrite(MS2, LOW);
+  digitalWrite(DIR, MP);
+    if (nappiArvo != 0) {
+    SEIS;
+    }
+    else {
+      aja();
+    }
+  
+}
+
+void vasemmalle() {
+  nappiArvo = digitalRead(NAPPIVAS);
+  digitalWrite(MS1, LOW);
+  digitalWrite(MS2, LOW);
+  digitalWrite(DIR, VP);
+    if (nappiArvo != 0){
+    SEIS;
+  }
+  else {
+    aja();
+  }
+  
+}
+
